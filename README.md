@@ -10,7 +10,7 @@ In this project, you will train a deep neural network to identify and track a ta
 ## Setup Instructions
 **Clone the repository**
 ```
-$ git clone https://github.com/udacity/RoboND-DeepLearning.git
+$ git clone https://github.com/gorsnehal/RoboND-Term1-P4-DeepLearning.git
 ```
 
 **Download the data**
@@ -126,7 +126,7 @@ After the training run has completed, your model will be stored in the `data/wei
 
 The **sample_evalution_data** directory contains data specifically designed to test the networks performance on the FollowME task. In sample_evaluation data are three directories each generated using a different sampling method. The structure of these directories is exactly the same as `validation`, and `train` datasets provided to you. For instance `patrol_with_targ` contains an `images` and `masks` subdirectory. If you would like to the evaluation code on your `validation` data a copy of the it should be moved into `sample_evaluation_data`, and then the appropriate arguments changed to the function calls in the `model_training.ipynb` notebook.
 
-The notebook has examples of how to evaulate your model once you finish training. Think about the sourcing methods, and how the information provided in the evaluation sections relates to the final score. Then try things out that seem like they may work. 
+The notebook has examples of how to evaluate your model once you finish training. Think about the sourcing methods, and how the information provided in the evaluation sections relates to the final score. Then try things out that seem like they may work. 
 
 ## Scoring ##
 

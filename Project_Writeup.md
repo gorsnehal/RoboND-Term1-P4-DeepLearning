@@ -21,9 +21,9 @@ Following report explains technical details & learnings out of FollowMe project.
 **a. Fully Convolutional Neural Network**
 
 - In Traditional Neural net used for object classification, Convolution layers are followed by Fully connected Neural network.
-- Problem with that architecture is it do not preserves sptial information. So not capable at identifying for example where in the image particular object is. Also due to fully connected neural network at the end, it's not capable at handling different size images.
+- Problem with that architecture is it do not preserves spatial information. So not capable at identifying for example where in the image particular object is. Also due to fully connected neural network at the end, it's not capable at handling different size images.
 - Fully convolutional neural network replaces the Fully connected layers with convolutional layers. That's why Fully Convolutional Neural Network (FCN).
-- FCN due to use of convolutional layers preserves sptial information & also capable of handling different size images
+- FCN due to use of convolutional layers preserves spatial information & also capable of handling different size images
 - My architecture looks like below
 
 [image_1]: ./Images/FCN_Architecture.jpg
@@ -34,8 +34,8 @@ In following few sections I will further describe individual blocks
 **b. Encode / Convolution Layer**
 
 - My very crude view - Convolutional layers are essentially feature extractors. Which combined with weights & trained through backpropogation capable of learning different patterns
-(Somewhat correlated with Cascade Adaboost / SVM (traditional machine learning), where each individual weak learner is classifying in N dimensinal feature space......Though CNN & DNN are much deeper & combined with huge data & processing power, acheiving much more than traditional machine learning)
-- Each successive convolution layer build on lower layers features to suceesively learn more & more complex features
+(Somewhat correlated with Cascade Adaboost / SVM (traditional machine learning), where each individual weak learner is classifying in N dimensional feature space......Though CNN & DNN are much deeper & combined with huge data & processing power, achieving much more than traditional machine learning)
+- Each successive convolution layer build on lower layers features to successively learn more & more complex features
 - Encoding part implemented below
 
 ```
@@ -47,9 +47,9 @@ def separable_conv2d_batchnorm(input_layer, filters, strides=1):
     return output_layer
 ```
 
-- `Seperable Convolutional`: Seprating traditional convolution (3D) into 2D convolution (on each channel of input) followed by 1x1 covolution. Advantage of doing this is huge saving on number of parameters. Ex. For my case with input size of 160 x 160 x 3 & 3 x 3 x 3 kernel below traditional vs. seperable convolution compared for 1st convolution (160 x 160 x 32)
+- `Separable Convolutional`: Separating traditional convolution (3D) into 2D convolution (on each channel of input) followed by 1x1 convolution. Advantage of doing this is huge saving on number of parameters. Ex. For my case with input size of 160 x 160 x 3 & 3 x 3 x 3 kernel below traditional vs. separable convolution compared for 1st convolution (160 x 160 x 32)
     `Normal Convolutional - 32 x 3 x 3 x 3 = 864`
-    `Seperable Convolutional - 3 x 3 x 3 + 32 x 3 = 123`
+    `Separable Convolutional - 3 x 3 x 3 + 32 x 3 = 123`
    
 - `Batch Normalization`: Normalizes each inputs of each layer. Advantage of doing this is, better regularization & faster & better training for deeper networks
 
@@ -65,8 +65,8 @@ encodl = conv2d_batchnorm(cnvl3, filters = num_classes, kernel_size = 1)
 
 **d: Decode Layer**
 
-- Decoders are fundamentally projecting learned features above to successively higher resolution reprsentation
-- One important part here is a skip conection. 
+- Decoders are fundamentally projecting learned features above to successively higher resolution representation
+- One important part here is a skip connection. 
 
 ```
 def decoder_block(small_ip_layer, large_ip_layer, filters):
@@ -119,7 +119,7 @@ def fcn_model(inputs, num_classes):
 Below I'm describing how I tuned different parameters
 1. Steps per epoch, validation step & workers I kept the default values
 2. Batch size kept as per database size
-3. First version of the network (as shown above), trained with 32 filters at first convolution & sucessive convolution increased depth 64 -> 128 -> 256. With this network best score, I got is around 0.4
+3. First version of the network (as shown above), trained with 32 filters at first convolution & successive convolution increased depth 64 -> 128 -> 256. With this network best score, I got is around 0.4
 4. Since errors on smaller size objects (hero & other objects) were high, I made following changes
    a. Added `more images` with very far hero & other pedestrians
    b. I added `more filters` to capture more variation / features, making it four times (in 2 steps) the first version. with         this depths of the network (Encoder part) became 128 -> 256 -> 512 -> 1024. With this network, I got score around 0.457
@@ -168,16 +168,16 @@ Final Score                    : 0.4574
 
 - I feel I can try with addition of few more layers, but with stride of 1
 - Addition of more data should improve performance
-- For identifying cat or dog instead of a human / pedestrian in images. Same network cannot be reused entirely, but inital encoders layers can be reused. Following are few concerns
-  a. As successive convolution layers learns more & more complex features, may be deeper layers requires some fine tuning or        can be discarded
+- For identifying cat or dog instead of a human / pedestrian in images. Same network cannot be reused entirely, but initial encoders layers can be reused. Following are few concerns
+  a. As successive convolution layers learns more & more complex features, may be deeper layers requires some fine tuning or can be discarded
   b. New database size, learning rate & similarity with human database, can become a factor for re-training
   
-**Calrifying above comments as per Reviwer's comments**
+**Clarifying above comments as per Reviewer comments**
 
-What my understanding is, above network can be used but not entrirely as it is. I have following views
+What my understanding is, above network can be used but not entirely as it is. I have following views
 1. As each convolution layer learns successively complex patterns, later layers (encoding) will learn features related to human / pedestrian. (Reference Lesson 33 - Section 6)
-2. So later layers has to be retrained for car, cat, dog patterns, while intial layers which are learning general features like esdges, color, etc. can be reused as is
+2. So later layers has to be retrained for car, cat, dog patterns, while initial layers which are learning general features like edges, color, etc. can be reused as is
 3. Also as we are re-using the network which is already trained, may be learning rate required to be low. Because we don't want to disturb it too much
-4. Further as it's already optimal, my understanding is it should work for car, cat or dog patterns with smaller databse & retuning
+4. Further as it's already optimal, my understanding is it should work for car, cat or dog patterns with smaller database & retuning
 
-I hope above clarifies my points further. Please share reference, if my understanding is no correct.
+I hope above clarifies my points further. Please share reference, if my understanding is not correct.
