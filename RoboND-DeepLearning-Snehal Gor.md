@@ -172,12 +172,9 @@ Final Score                    : 0.4574
   a. As successive convolution layers learns more & more complex features, may be deeper layers requires some fine tuning or can be discarded
   b. New database size, learning rate & similarity with human database, can become a factor for re-training
   
-**Clarifying above comments as per Reviewer comments**
+**Clarifying above comments further**
 
-What my understanding is, above network can be used but not entirely as it is. I have following views
 1. As each convolution layer learns successively complex patterns, later layers (encoding) will learn features related to human / pedestrian. (Reference Lesson 33 - Section 6)
 2. So later layers has to be retrained for car, cat, dog patterns, while initial layers which are learning general features like edges, color, etc. can be reused as is
 3. Also as we are re-using the network which is already trained, may be learning rate required to be low. Because we don't want to disturb it too much
 4. Further as it's already optimal, my understanding is it should work for car, cat or dog patterns with smaller database & retuning
-
-I hope above clarifies my points further. Please share reference, if my understanding is not correct.
